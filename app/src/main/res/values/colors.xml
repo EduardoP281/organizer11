@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="status_pending_bg">#FFF1E4</color>
+    <color name="status_pending_text">#D95B00</color>
+
+    <color name="status_done_bg">#E8E0FF</color>
+    <color name="status_done_text">#6A35C5</color>
+
+    <color name="status_paused_bg">#E0F3FF</color>
+    <color name="status_paused_text">#007BBD</color>
+    <color name="bottom_nav_active">#6A35C5</color> <color name="bottom_nav_inactive">#757575</color> ```
+</resources>
