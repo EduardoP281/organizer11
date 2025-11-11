@@ -1,27 +1,27 @@
-package com.example.organizer11.ui.mainlist
+package com.example.organizer11.ui.starred
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.organizer11.OrganizerApplication
 import com.example.organizer11.data.model.Reminder
-import com.example.organizer11.databinding.FragmentMainListBinding
+import com.example.organizer11.databinding.FragmentStarredListBinding
+import com.example.organizer11.ui.mainlist.ReminderAdapter
+import com.example.organizer11.ui.mainlist.ReminderClickListener
 import com.example.organizer11.viewmodel.ReminderViewModel
-import com.example.organizer11.viewmodel.ReminderViewModelFactory // <-- Importa la Factory
+import com.example.organizer11.viewmodel.ReminderViewModelFactory
 
-// 1. Implementa la interfaz del adapter (esto ya está bien)
-class MainListFragment : Fragment(), ReminderClickListener {
+class StarredListFragment : Fragment(), ReminderClickListener {
 
-    private var _binding: FragmentMainListBinding? = null
+    private var _binding: FragmentStarredListBinding? = null
     private val binding get() = _binding!!
 
-    // --- ▼▼▼ ¡ESTA ES LA LÍNEA MÁS IMPORTANTE A CAMBIAR! ▼▼▼ ---
-    // Inyecta el ViewModel usando la Factory para pasarle el repositorio.
     private val viewModel: ReminderViewModel by viewModels {
         ReminderViewModelFactory((requireActivity().application as OrganizerApplication).repository)
     }
@@ -32,7 +32,7 @@ class MainListFragment : Fragment(), ReminderClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainListBinding.inflate(inflater, container, false)
+        _binding = FragmentStarredListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,21 +41,21 @@ class MainListFragment : Fragment(), ReminderClickListener {
 
         setupRecyclerView()
 
-        // Observa los datos del ViewModel
-        viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
-            // Envía la lista actualizada al adapter
-            reminderAdapter.submitList(reminders)
+        viewModel.starredReminders.observe(viewLifecycleOwner) { starredList ->
+            reminderAdapter.submitList(starredList)
+
+            // --- LÍNEA ACTUALIZADA ---
+            binding.layoutNoStarredItems.isVisible = starredList.isEmpty()
+            binding.rvStarredReminders.isVisible = starredList.isNotEmpty()
         }
     }
 
     private fun setupRecyclerView() {
-        // Pasa 'this' como listener
         reminderAdapter = ReminderAdapter(this)
-        binding.rvReminders.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvReminders.adapter = reminderAdapter
+        binding.rvStarredReminders.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvStarredReminders.adapter = reminderAdapter
     }
 
-    // 3. Implementa los métodos de la interfaz (todo este bloque ya está perfecto)
     override fun onDeleteClicked(reminder: Reminder) {
         viewModel.deleteReminder(reminder)
     }
@@ -71,8 +71,7 @@ class MainListFragment : Fragment(), ReminderClickListener {
     }
 
     override fun onItemClicked(reminder: Reminder) {
-        val action = MainListFragmentDirections
-            .actionMainListFragmentToReminderDetailFragment(reminder.id.toString())
+        val action = StarredListFragmentDirections.actionStarredListFragmentToReminderDetailFragment(reminder.id.toString())
         findNavController().navigate(action)
     }
 

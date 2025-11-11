@@ -6,7 +6,9 @@
     <item
         android:id="@+id/addReminderFragment"
         android:icon="@drawable/ic_add" android:title="Añadir" />
+
+    <!-- ▼▼▼ CAMBIO AQUÍ ▼▼▼ -->
     <item
-        android:id="@+id/favoritesFragment"
+        android:id="@+id/starredListFragment"
         android:icon="@drawable/ic_star" android:title="Destacados" />
 </menu>

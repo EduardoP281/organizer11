@@ -33,10 +33,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavVisibility() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                // IDs de tu nav_graph.xml
+                // IDs de los fragmentos donde la barra SÍ debe ser visible
                 R.id.mainListFragment -> showBottomNav()
-                // R.id.favoritesFragment -> showBottomNav() // <-- Descomenta si añades favoritos
-                else -> hideBottomNav() // Oculta en "add" y "detail"
+                R.id.starredListFragment -> showBottomNav() // <-- LÍNEA AÑADIDA
+
+                // Para cualquier otro destino (add, detail, etc.), se oculta
+                else -> hideBottomNav()
             }
         }
     }

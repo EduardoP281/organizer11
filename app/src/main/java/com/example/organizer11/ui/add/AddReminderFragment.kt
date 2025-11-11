@@ -18,6 +18,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.example.organizer11.OrganizerApplication
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,7 +26,7 @@ import java.util.Locale
 class AddReminderFragment : Fragment() {
 
     private val viewModel: ReminderViewModel by viewModels {
-        ReminderViewModelFactory(requireActivity().application)
+        ReminderViewModelFactory((requireActivity().application as OrganizerApplication).repository)
     }
 
     // Vistas

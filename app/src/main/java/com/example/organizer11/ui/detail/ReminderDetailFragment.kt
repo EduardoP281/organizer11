@@ -10,19 +10,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.organizer11.OrganizerApplication
 import com.example.organizer11.R
 import com.example.organizer11.viewmodel.ReminderViewModel
 import com.example.organizer11.viewmodel.ReminderViewModelFactory
 
-
 class ReminderDetailFragment : Fragment() {
 
-    // 1. Obtener el ViewModel
+    // 1. Obtener el ViewModel (esto ya lo tenías bien)
     private val viewModel: ReminderViewModel by viewModels {
-        ReminderViewModelFactory(requireActivity().application)
+        ReminderViewModelFactory((requireActivity().application as OrganizerApplication).repository)
     }
 
-    // 2. Obtener los argumentos de navegación (el ID)
+    // 2. Obtener los argumentos de navegación (el ID del recordatorio)
     private val args: ReminderDetailFragmentArgs by navArgs()
 
     private lateinit var tvTitle: TextView
@@ -45,25 +45,27 @@ class ReminderDetailFragment : Fragment() {
         tvDate = view.findViewById(R.id.tv_detail_date)
         val btnBack: ImageButton = view.findViewById(R.id.btn_back_detail)
 
-        // 3. Configurar el botón de retroceso
         btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        // 4. Cargar los datos
+        // 3. Cargar los datos (forma corregida y eficiente)
         loadReminderData()
     }
 
     private fun loadReminderData() {
-        // Convertimos el ID (que es String) a Int
-        val reminderId = args.reminderId.toInt()
+        // Convertimos el ID del argumento (que es String) a Long, porque así está en el modelo
+        val reminderId = args.reminderId.toLong()
 
-        // 5. Le pedimos al ViewModel que busque ese recordatorio
-        viewModel.getReminder(reminderId).observe(viewLifecycleOwner) { reminder ->
-            // 6. Cuando el ViewModel nos da el recordatorio, actualizamos la UI
+        // 4. Observamos la lista COMPLETA de recordatorios
+        viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
+            // 5. Buscamos en la lista el recordatorio que coincida con nuestro ID
+            val reminder = reminders.find { it.id == reminderId }
+
+            // 6. Si lo encontramos, actualizamos la UI
             if (reminder != null) {
                 tvTitle.text = reminder.title
-                tvDescription.text = reminder.description
+                tvDescription.text = reminder.description ?: "Sin descripción" // Usamos el operador Elvis para el campo opcional
                 tvDate.text = reminder.dueDate
             }
         }

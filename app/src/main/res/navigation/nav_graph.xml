@@ -2,36 +2,44 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mav_graph"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/mainListFragment">
 
     <fragment
         android:id="@+id/mainListFragment"
         android:name="com.example.organizer11.ui.mainlist.MainListFragment"
-        android:label="fragment_main_list"
+        android:label="Recordatorios"
         tools:layout="@layout/fragment_main_list">
-        <action
-            android:id="@+id/action_mainListFragment_to_addReminderFragment"
-            app:destination="@id/addReminderFragment" />
         <action
             android:id="@+id/action_mainListFragment_to_reminderDetailFragment"
             app:destination="@id/reminderDetailFragment" />
     </fragment>
 
+    <!-- NUEVO FRAGMENTO -->
     <fragment
-        android:id="@+id/addReminderFragment"
-        android:name="com.example.organizer11.ui.add.AddReminderFragment"
-        android:label="fragment_add_reminder"
-        tools:layout="@layout/fragment_add_reminder" />
+        android:id="@+id/starredListFragment"
+        android:name="com.example.organizer11.ui.starred.StarredListFragment"
+        android:label="Destacados"
+        tools:layout="@layout/fragment_starred_list">
+        <action
+            android:id="@+id/action_starredListFragment_to_reminderDetailFragment"
+            app:destination="@id/reminderDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/reminderDetailFragment"
         android:name="com.example.organizer11.ui.detail.ReminderDetailFragment"
-        android:label="fragment_reminder_detail"
+        android:label="Detalle"
         tools:layout="@layout/fragment_reminder_detail">
         <argument
             android:name="reminderId"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addReminderFragment"
+        android:name="com.example.organizer11.ui.add.AddReminderFragment"
+        android:label="Añadir Recordatorio"
+        tools:layout="@layout/fragment_add_reminder" />
 
 </navigation>
