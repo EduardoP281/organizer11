@@ -3,16 +3,15 @@ package com.example.organizer11.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-// Convertimos la data class en una tabla de base de datos
+// 1. Cambia el nombre de la tabla a "reminders_table" para que coincida con tu DAO
 @Entity(tableName = "reminders_table")
 data class Reminder(
-    @PrimaryKey(autoGenerate = true) // El ID se genera solo
-    val id: Int = 0, // Damos un valor por defecto
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val title: String,
-    val description: String?,
     val dueDate: String,
-    val iconResId: Int
+    val iconResId: Int,
+    val description: String?,
+    val importance: Int = 0, // 0: Normal, 1: Medio, 2: Alto
+    val isStarred: Boolean = false
 )
-
-// NOTA: Eliminamos 'status' por ahora para simplificar.
-// Podemos añadirlo de nuevo más tarde.

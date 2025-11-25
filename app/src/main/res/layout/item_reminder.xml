@@ -3,94 +3,107 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:paddingVertical="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="0dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:cardCornerRadius="24dp"
-            app:cardBackgroundColor="#FFE0FB"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp"
+        <!-- Icono de Importancia/Estrella (se mantiene igual) -->
+        <ImageView
+            android:id="@+id/iv_star"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_star_outline"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:tint="?attr/colorPrimary"
+            tools:visibility="visible" />
 
-            <ImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                app:tint="#D946EF"
-                tools:src="@drawable/ic_bag" />
-        </com.google.android.material.card.MaterialCardView>
+        <!-- El resto de las vistas (iv_icon, tv_title, tv_due_date) se mantienen igual -->
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_star"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@android:drawable/ic_dialog_info" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tv_due_date"
-            app:layout_constraintEnd_toStartOf="@id/tv_status"
-            app:layout_constraintStart_toEndOf="@id/card_icon"
-            app:layout_constraintTop_toTopOf="@id/card_icon"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            app:layout_constraintEnd_toStartOf="@+id/importance_indicator_container"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_due_date"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="Entrega de trabajo" />
+            tools:text="Título del Recordatorio" />
 
         <TextView
             android:id="@+id/tv_due_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/card_icon"
-            app:layout_constraintEnd_toStartOf="@id/tv_status"
-            app:layout_constraintStart_toEndOf="@id/card_icon"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
-            tools:text="Hasta: 25/10/2025" />
+            tools:text="11 Noviembre 2025" />
 
-        <TextView
-            android:id="@+id/tv_status"
+        <!-- ▼▼▼ ESTE ES EL NUEVO ELEMENTO ▼▼▼ -->
+        <!-- Contenedor para el círculo de color que funcionará como botón -->
+        <FrameLayout
+            android:id="@+id/importance_indicator_container"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- El círculo de color en sí -->
+            <View
+                android:id="@+id/importance_indicator_circle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/color_circle_normal"
+                tools:background="@drawable/color_circle_high"/>
+        </FrameLayout>
+        <!-- ▲▲▲ FIN DEL NUEVO ELEMENTO ▲▲▲ -->
+
+        <!-- El botón de eliminar se mantiene igual -->
+        <ImageButton
+            android:id="@+id/btn_delete"
+            style="?attr/materialIconButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/status_tag_pending"
-            android:paddingStart="12dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="4dp"
-            android:textSize="12sp"
-            android:textStyle="bold"
-
-            android:textColor="@color/black"
-
+            android:contentDescription="Eliminar recordatorio"
+            android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pendiente"
-            tools:textColor="#FF6B6B" />
+            app:tint="?attr/colorError" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

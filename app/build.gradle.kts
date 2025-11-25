@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -17,6 +18,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Dejamos un solo bloque buildFeatures
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -38,30 +44,34 @@ android {
 }
 
 dependencies {
+    // Firebase (BOM - ¡Esta es la línea clave que faltaba!)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth.ktx)
 
+    // Core
+    implementation("androidx.fragment:fragment-ktx:1.6.2") // (Esta la tenías separada, está bien)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.material.v1120)
-
+    // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(libs.androidx.room.room.runtime)
-    implementation(libs.androidx.room.room.ktx)
-    annotationProcessor(libs.androidx.room.compiler.v261)
+    // Room (Usando solo KSP)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
-    implementation(libs.androidx.room.room.runtime)
-    implementation(libs.androidx.room.room.ktx)
-    ksp(libs.room.compiler)
-
+    // Test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -10,31 +10,42 @@ lifecycleRuntimeKtx = "2.9.4"
 material = "1.13.0"
 activity = "1.11.0"
 constraintlayout = "2.2.1"
-materialVersion = "1.12.0"
-navigationFragmentKtx = "2.9.6"
-roomCompiler = "2.6.1"
-roomCompilerVersion = "2.8.3"
+googleGmsGoogleServices = "4.4.4"
+
+# --- VERSIONES CORREGIDAS Y AÑADIDAS ---
+navigation = "2.7.7"          # Versión correcta (no 2.9.x)
+room = "2.6.1"                # Versión unificada de Room
+firebaseBom = "33.2.0"          # AÑADIDO: El Bill of Materials de Firebase
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
-androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
-androidx-room-compiler-v261 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
-androidx-room-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompilerVersion" }
-androidx-room-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompilerVersion" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-material-v1120 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+
+# --- LIBS DE NAVEGACIÓN CORREGIDAS ---
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+
+# --- LIBS DE ROOM CORREGIDAS ---
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# --- LIBS DE FIREBASE AÑADIDAS Y CORREGIDAS ---
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
+
+# --- LIBS DE PRUEBAS ---
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

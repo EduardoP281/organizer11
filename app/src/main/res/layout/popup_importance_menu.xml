@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_background"
+    android:elevation="8dp"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/popup_star_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/popup_star"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_star_filled"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destacar"
+            android:textAppearance="?attr/textAppearanceBodyMedium"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        android:layout_marginVertical="4dp"/>
+
+    <LinearLayout
+        android:id="@+id/popup_color_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/color_circle_normal"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Normal"
+            android:textAppearance="?attr/textAppearanceBodyMedium"/>
+
+        <ImageView
+            android:id="@+id/popup_check_normal"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/popup_color_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/color_circle_medium"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Importante"
+            android:textAppearance="?attr/textAppearanceBodyMedium"/>
+
+        <ImageView
+            android:id="@+id/popup_check_medium"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/popup_color_high"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/color_circle_high"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Muy Importante"
+            android:textAppearance="?attr/textAppearanceBodyMedium"/>
+
+        <ImageView
+            android:id="@+id/popup_check_high"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</LinearLayout>
