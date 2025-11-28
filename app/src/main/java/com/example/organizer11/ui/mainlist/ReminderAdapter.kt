@@ -1,5 +1,6 @@
 package com.example.organizer11.ui.mainlist
 
+import android.graphics.Color // <-- IMPORTANTE: Para el color rojo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.organizer11.R
 import com.example.organizer11.data.model.Reminder
-import com.google.android.material.card.MaterialCardView
+import com.example.organizer11.utils.NotificationScheduler // <-- IMPORTANTE: Tu util de fechas
 
 interface ReminderClickListener {
     fun onDeleteClicked(reminder: Reminder)
@@ -56,11 +57,28 @@ class ReminderAdapter(
 
         fun bind(reminder: Reminder) {
             title.text = reminder.title
-            dueDate.text = reminder.dueDate
+
+            // ▼▼▼ LÓGICA DE VENCIMIENTO (CAMBIO IMPORTANTE) ▼▼▼
+
+            // 1. Convertimos la fecha guardada a milisegundos usando tu utilidad
+            val dueMillis = NotificationScheduler.parseDateToMillis(reminder.endDate, reminder.dueTime)
+            val now = System.currentTimeMillis()
+
+            if (dueMillis != null && now > dueMillis) {
+                // CASO 1: YA VENCIÓ (Fecha actual es mayor a la fecha límite)
+                dueDate.text = "VENCIDO: ${reminder.endDate}"
+                dueDate.setTextColor(Color.RED) // Texto en Rojo
+            } else {
+                // CASO 2: AÚN ESTÁ A TIEMPO
+                dueDate.text = "Vence: ${reminder.endDate} - ${reminder.dueTime}"
+                dueDate.setTextColor(Color.DKGRAY) // Texto en Gris oscuro (Normal)
+            }
+            // ▲▲▲ FIN DE LÓGICA DE VENCIMIENTO ▲▲▲
+
             icon.setImageResource(reminder.iconResId)
             starIcon.visibility = if (reminder.isStarred) View.VISIBLE else View.GONE
 
-            // Lógica para establecer el color del círculo (CORREGIDA)
+            // Lógica para establecer el color del círculo
             val backgroundDrawableRes = when (reminder.importance) {
                 1 -> R.drawable.color_circle_medium
                 2 -> R.drawable.color_circle_high

@@ -8,6 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="@color/card_background"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
 
@@ -18,7 +19,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="0dp">
 
-        <!-- Icono de Importancia/Estrella (se mantiene igual) -->
         <ImageView
             android:id="@+id/iv_star"
             android:layout_width="20dp"
@@ -32,7 +32,6 @@
             app:tint="?attr/colorPrimary"
             tools:visibility="visible" />
 
-        <!-- El resto de las vistas (iv_icon, tv_title, tv_due_date) se mantienen igual -->
         <ImageView
             android:id="@+id/iv_icon"
             android:layout_width="40dp"
@@ -51,6 +50,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="@color/text_primary"
             app:layout_constraintEnd_toStartOf="@+id/importance_indicator_container"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,8 +70,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             tools:text="11 Noviembre 2025" />
 
-        <!-- ▼▼▼ ESTE ES EL NUEVO ELEMENTO ▼▼▼ -->
-        <!-- Contenedor para el círculo de color que funcionará como botón -->
         <FrameLayout
             android:id="@+id/importance_indicator_container"
             android:layout_width="48dp"
@@ -81,7 +79,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_delete"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- El círculo de color en sí -->
             <View
                 android:id="@+id/importance_indicator_circle"
                 android:layout_width="24dp"
@@ -90,9 +87,7 @@
                 android:background="@drawable/color_circle_normal"
                 tools:background="@drawable/color_circle_high"/>
         </FrameLayout>
-        <!-- ▲▲▲ FIN DEL NUEVO ELEMENTO ▲▲▲ -->
 
-        <!-- El botón de eliminar se mantiene igual -->
         <ImageButton
             android:id="@+id/btn_delete"
             style="?attr/materialIconButtonStyle"

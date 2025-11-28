@@ -16,9 +16,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
-
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
+
+    <ImageButton
+        android:id="@+id/btn_theme_switch"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_moon"
+        android:background="@color/app_background"
+        android:contentDescription="Cambiar tema"
+        android:elevation="10dp"
+        app:tint="#6A35C5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
@@ -29,14 +42,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="#E8E0FF"
         app:menu="@menu/bottom_nav_menu"
-
         app:labelVisibilityMode="labeled"
-
         app:indicatorColor="@android:color/transparent"
-
         app:itemIconTint="@color/bottom_nav_color_selector"
         app:itemTextColor="@color/bottom_nav_color_selector" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,6 @@ class ReminderViewModel(private val repository: ReminderRepository) : ViewModel(
     // LiveData para todos los recordatorios
     val allReminders: LiveData<List<Reminder>> = repository.allReminders.asLiveData()
 
-    // --- NUEVA LIVEDATA ---
     // LiveData para los recordatorios destacados
     val starredReminders: LiveData<List<Reminder>> = repository.starredReminders.asLiveData()
 
@@ -28,6 +27,13 @@ class ReminderViewModel(private val repository: ReminderRepository) : ViewModel(
 
     fun insertReminder(reminder: Reminder) = viewModelScope.launch {
         repository.insert(reminder)
+    }
+
+    // ▼▼▼ ESTA ES LA FUNCIÓN QUE FALTABA ▼▼▼
+    fun getReminder(id: Int): LiveData<Reminder> {
+        // Asumimos que tu repositorio tiene esta función.
+        // Si te da error aquí, avísame para darte el código del Repository.
+        return repository.getReminder(id).asLiveData()
     }
 }
 

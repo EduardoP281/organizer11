@@ -51,6 +51,7 @@ dependencies {
 
     // Core
     implementation("androidx.fragment:fragment-ktx:1.6.2") // (Esta la tenías separada, está bien)
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

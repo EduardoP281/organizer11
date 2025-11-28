@@ -27,4 +27,9 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
     suspend fun delete(reminder: Reminder) {
         reminderDao.deleteReminder(reminder)
     }
+
+    // Asegúrate de tener esto en tu repositorio:
+    fun getReminder(id: Int): Flow<Reminder> {
+        return reminderDao.getReminderById(id)
+    }
 }
