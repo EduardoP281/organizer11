@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "220339841394",
+    "project_id": "organizer11db",
+    "storage_bucket": "organizer11db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220339841394:android:a9f9650e844966b62615eb",
+        "android_client_info": {
+          "package_name": "com.example.organizer11"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC1UZiNdPFmzUEHyjbvaoMocHCwyuRpeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

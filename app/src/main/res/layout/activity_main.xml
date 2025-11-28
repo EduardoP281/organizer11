@@ -37,4 +37,6 @@
         app:itemIconTint="@color/bottom_nav_color_selector"
         app:itemTextColor="@color/bottom_nav_color_selector" />
 
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

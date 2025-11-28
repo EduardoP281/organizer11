@@ -1,37 +1,30 @@
 package com.example.organizer11.ui.mainlist
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.organizer11.R
 import com.example.organizer11.data.model.Reminder
+import com.google.android.material.card.MaterialCardView
 
+interface ReminderClickListener {
+    fun onDeleteClicked(reminder: Reminder)
+    fun onImportanceChanged(reminder: Reminder, newImportance: Int)
+    fun onStarredClicked(reminder: Reminder)
+    fun onItemClicked(reminder: Reminder)
+}
 
 class ReminderAdapter(
-    private val context: Context,
-    private val reminders: List<Reminder>,
-    private val onItemClick: (Reminder) -> Unit
-) : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
-
-    inner class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById(R.id.iv_icon)
-        val title: TextView = itemView.findViewById(R.id.tv_title)
-        val dueDate: TextView = itemView.findViewById(R.id.tv_due_date)
-        val status: TextView = itemView.findViewById(R.id.tv_status) // La encontramos, pero la ocultaremos
-
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(reminders[position])
-                }
-            }
-        }
-    }
+    private val listener: ReminderClickListener
+) : ListAdapter<Reminder, ReminderAdapter.ReminderViewHolder>(ReminderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -39,25 +32,104 @@ class ReminderAdapter(
         return ReminderViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return reminders.size
+    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    // ▼▼▼ ESTA SECCIÓN ES LA QUE CAMBIÓ ▼▼▼
-    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
-        // Obtenemos el recordatorio actual (el nuevo modelo)
-        val reminder = reminders[position]
+    inner class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val starIcon: ImageView = itemView.findViewById(R.id.iv_star)
+        private val icon: ImageView = itemView.findViewById(R.id.iv_icon)
+        private val title: TextView = itemView.findViewById(R.id.tv_title)
+        private val dueDate: TextView = itemView.findViewById(R.id.tv_due_date)
+        private val deleteButton: ImageButton = itemView.findViewById(R.id.btn_delete)
+        private val importanceContainer: FrameLayout = itemView.findViewById(R.id.importance_indicator_container)
+        private val importanceCircle: View = itemView.findViewById(R.id.importance_indicator_circle)
 
-        // Asignamos los datos que sí tenemos
-        holder.icon.setImageResource(reminder.iconResId)
-        holder.title.text = reminder.title
-        holder.dueDate.text = reminder.dueDate
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClicked(getItem(position))
+                }
+            }
+        }
 
-        // Como el nuevo modelo 'Reminder.kt' no tiene 'status',
-        // simplemente ocultamos la etiqueta de estado.
-        holder.status.visibility = View.GONE
+        fun bind(reminder: Reminder) {
+            title.text = reminder.title
+            dueDate.text = reminder.dueDate
+            icon.setImageResource(reminder.iconResId)
+            starIcon.visibility = if (reminder.isStarred) View.VISIBLE else View.GONE
 
-        // BORRAMOS toda la lógica 'when (reminder.status) { ... }'
-        // porque 'reminder.status' ya no existe.
+            // Lógica para establecer el color del círculo (CORREGIDA)
+            val backgroundDrawableRes = when (reminder.importance) {
+                1 -> R.drawable.color_circle_medium
+                2 -> R.drawable.color_circle_high
+                else -> R.drawable.color_circle_normal
+            }
+            importanceCircle.setBackgroundResource(backgroundDrawableRes)
+
+            // Asignar listeners a los botones
+            deleteButton.setOnClickListener { listener.onDeleteClicked(reminder) }
+            importanceContainer.setOnClickListener { showCustomMenu(it, reminder) }
+        }
+
+        private fun showCustomMenu(anchorView: View, reminder: Reminder) {
+            val context = anchorView.context
+            val inflater = LayoutInflater.from(context)
+            val popupView = inflater.inflate(R.layout.popup_importance_menu, null)
+
+            val popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+
+            val starButton: ImageView = popupView.findViewById(R.id.popup_star)
+            starButton.setImageResource(if (reminder.isStarred) R.drawable.ic_star_filled else R.drawable.ic_star_outline)
+
+            val checkNormal: ImageView = popupView.findViewById(R.id.popup_check_normal)
+            val checkMedium: ImageView = popupView.findViewById(R.id.popup_check_medium)
+            val checkHigh: ImageView = popupView.findViewById(R.id.popup_check_high)
+
+            checkNormal.visibility = View.GONE
+            checkMedium.visibility = View.GONE
+            checkHigh.visibility = View.GONE
+
+            when (reminder.importance) {
+                0 -> checkNormal.visibility = View.VISIBLE
+                1 -> checkMedium.visibility = View.VISIBLE
+                2 -> checkHigh.visibility = View.VISIBLE
+            }
+
+            popupView.findViewById<View>(R.id.popup_star_container).setOnClickListener {
+                listener.onStarredClicked(reminder)
+                popupWindow.dismiss()
+            }
+            popupView.findViewById<View>(R.id.popup_color_normal).setOnClickListener {
+                listener.onImportanceChanged(reminder, 0)
+                popupWindow.dismiss()
+            }
+            popupView.findViewById<View>(R.id.popup_color_medium).setOnClickListener {
+                listener.onImportanceChanged(reminder, 1)
+                popupWindow.dismiss()
+            }
+            popupView.findViewById<View>(R.id.popup_color_high).setOnClickListener {
+                listener.onImportanceChanged(reminder, 2)
+                popupWindow.dismiss()
+            }
+
+            popupWindow.showAsDropDown(anchorView)
+        }
+    }
+}
+
+private class ReminderDiffCallback : DiffUtil.ItemCallback<Reminder>() {
+    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+        return oldItem == newItem
     }
 }

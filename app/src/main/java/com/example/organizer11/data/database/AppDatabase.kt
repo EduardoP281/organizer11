@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.organizer11.data.model.Reminder
 
-@Database(entities = [Reminder::class], version = 1, exportSchema = false)
+@Database(entities = [Reminder::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun reminderDao(): ReminderDao
