@@ -1,47 +1,52 @@
 package com.example.organizer11.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.organizer11.data.database.AppDatabase
 import com.example.organizer11.data.model.Reminder
-import com.example.organizer11.data.repository.ReminderRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-class ReminderViewModel(private val repository: ReminderRepository) : ViewModel() {
+class ReminderViewModel(application: Application) : AndroidViewModel(application) {
 
-    // LiveData para todos los recordatorios
-    val allReminders: LiveData<List<Reminder>> = repository.allReminders.asLiveData()
+    private val reminderDao = AppDatabase.getDatabase(application).reminderDao()
 
-    // LiveData para los recordatorios destacados
-    val starredReminders: LiveData<List<Reminder>> = repository.starredReminders.asLiveData()
+    // Obtenemos el ID del usuario actual de Firebase
+    private val currentUserId: String = FirebaseAuth.getInstance().currentUser?.uid ?: "unknown_user"
+
+    // Ahora filtramos las listas usando ese ID
+    val allReminders: LiveData<List<Reminder>> = reminderDao.getAllReminders(currentUserId).asLiveData()
+    val starredReminders: LiveData<List<Reminder>> = reminderDao.getStarredReminders(currentUserId).asLiveData()
+
+    fun insertReminder(reminder: Reminder) {
+        viewModelScope.launch {
+            reminderDao.insertReminder(reminder)
+        }
+    }
 
     fun updateReminder(reminder: Reminder) = viewModelScope.launch {
-        repository.update(reminder)
+        reminderDao.updateReminder(reminder)
     }
 
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch {
-        repository.delete(reminder)
+        reminderDao.deleteReminder(reminder)
     }
 
-    fun insertReminder(reminder: Reminder) = viewModelScope.launch {
-        repository.insert(reminder)
-    }
-
-    // ▼▼▼ ESTA ES LA FUNCIÓN QUE FALTABA ▼▼▼
     fun getReminder(id: Int): LiveData<Reminder> {
-        // Asumimos que tu repositorio tiene esta función.
-        // Si te da error aquí, avísame para darte el código del Repository.
-        return repository.getReminder(id).asLiveData()
+        return reminderDao.getReminderById(id).asLiveData()
     }
 }
 
-class ReminderViewModelFactory(private val repository: ReminderRepository) : ViewModelProvider.Factory {
+class ReminderViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ReminderViewModel(repository) as T
+            return ReminderViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -61,9 +61,16 @@
         android:name="com.example.organizer11.ui.mainlist.MainListFragment"
         android:label="Recordatorios"
         tools:layout="@layout/fragment_main_list">
+
         <action
             android:id="@+id/action_mainListFragment_to_reminderDetailFragment"
             app:destination="@id/reminderDetailFragment" />
+
+        <action
+            android:id="@+id/action_mainListFragment_to_singInFragment"
+            app:destination="@id/singInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

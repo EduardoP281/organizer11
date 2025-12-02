@@ -6,7 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.organizer11.data.model.Reminder
 
-@Database(entities = [Reminder::class], version = 2, exportSchema = false)
+// CAMBIO 1: Subimos la versión a 2
+@Database(entities = [Reminder::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun reminderDao(): ReminderDao
@@ -21,7 +22,13 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "organizer_database"
-                ).build()
+                )
+                    // CAMBIO 2: Esta línea es MÁGICA.
+                    // Le dice a la app: "Si cambias la estructura, borra la base vieja y empieza de cero".
+                    // Esto evita el crash que estás teniendo.
+                    .fallbackToDestructiveMigration()
+                    .build()
+
                 INSTANCE = instance
                 instance
             }

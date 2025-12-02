@@ -22,8 +22,10 @@ class StarredListFragment : Fragment(), ReminderClickListener {
     private var _binding: FragmentStarredListBinding? = null
     private val binding get() = _binding!!
 
+    // CAMBIA ESE BLOQUE POR ESTE:
     private val viewModel: ReminderViewModel by viewModels {
-        ReminderViewModelFactory((requireActivity().application as OrganizerApplication).repository)
+        // La Factory ahora solo necesita la 'application'
+        ReminderViewModelFactory(requireActivity().application)
     }
 
     private lateinit var reminderAdapter: ReminderAdapter

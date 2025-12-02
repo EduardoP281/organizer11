@@ -21,12 +21,13 @@ interface ReminderDao {
     @Delete
     suspend fun deleteReminder(reminder: Reminder)
 
-    @Query("SELECT * FROM reminders_table ORDER BY importance DESC, id DESC")
-    fun getAllReminders(): Flow<List<Reminder>>
+    // ▼▼▼ FILTRAR POR USUARIO ▼▼▼
+    @Query("SELECT * FROM reminders_table WHERE userId = :userId ORDER BY id DESC")
+    fun getAllReminders(userId: String): Flow<List<Reminder>>
 
-    // También actualizamos la lista de destacados para que se ordene igual
-    @Query("SELECT * FROM reminders_table WHERE isStarred = 1 ORDER BY importance DESC, id DESC")
-    fun getStarredReminders(): Flow<List<Reminder>>
+    // ▼▼▼ FILTRAR POR USUARIO Y DESTACADOS ▼▼▼
+    @Query("SELECT * FROM reminders_table WHERE isStarred = 1 AND userId = :userId ORDER BY id DESC")
+    fun getStarredReminders(userId: String): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders_table WHERE id = :id")
     fun getReminderById(id: Int): Flow<Reminder>

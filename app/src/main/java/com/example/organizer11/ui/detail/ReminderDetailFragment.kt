@@ -16,9 +16,10 @@ import com.example.organizer11.viewmodel.ReminderViewModelFactory
 
 class ReminderDetailFragment : Fragment() {
 
+    // CAMBIA ESE BLOQUE POR ESTE:
     private val viewModel: ReminderViewModel by viewModels {
-        // Casteamos la application a 'OrganizerApplication' para poder acceder al '.repository'
-        ReminderViewModelFactory((requireActivity().application as com.example.organizer11.OrganizerApplication).repository)
+        // La Factory ahora pide 'Application', así que le damos solo eso.
+        ReminderViewModelFactory(requireActivity().application)
     }
 
     private val args: ReminderDetailFragmentArgs by navArgs()

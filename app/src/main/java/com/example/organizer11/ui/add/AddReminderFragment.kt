@@ -25,6 +25,7 @@ import com.google.android.material.timepicker.TimeFormat
 import com.google.android.material.textfield.TextInputEditText
 import com.example.organizer11.OrganizerApplication
 import com.example.organizer11.utils.NotificationScheduler
+import com.google.firebase.auth.FirebaseAuth // <-- IMPORTANTE: Añadir este import
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -34,7 +35,8 @@ import java.util.TimeZone
 class AddReminderFragment : Fragment() {
 
     private val viewModel: ReminderViewModel by viewModels {
-        ReminderViewModelFactory((requireActivity().application as OrganizerApplication).repository)
+        // La Factory ahora solo necesita la 'application'
+        ReminderViewModelFactory(requireActivity().application)
     }
 
     private lateinit var etTitle: TextInputEditText
@@ -147,12 +149,17 @@ class AddReminderFragment : Fragment() {
             return
         }
 
+        // ▼▼▼ AQUÍ ESTÁ EL CAMBIO PARA MULTIUSUARIO ▼▼▼
+        // Obtenemos el ID del usuario actual de Firebase
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
         val newReminder = Reminder(
+            userId = userId, // Asignamos el dueño del recordatorio
             title = title,
             description = description,
-            startDate = finalDateString, // Usamos la variable interna
+            startDate = finalDateString,
             endDate = finalDateString,
-            dueTime = finalTimeString,   // Usamos la variable interna
+            dueTime = finalTimeString,
             iconResId = selectedIconResId
         )
 
