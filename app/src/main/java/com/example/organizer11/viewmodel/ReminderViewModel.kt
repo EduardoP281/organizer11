@@ -3,42 +3,45 @@ package com.example.organizer11.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.organizer11.data.database.AppDatabase
 import com.example.organizer11.data.model.Reminder
-import com.google.firebase.auth.FirebaseAuth
+import com.example.organizer11.data.repository.ReminderRepository
 import kotlinx.coroutines.launch
 
 class ReminderViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val reminderDao = AppDatabase.getDatabase(application).reminderDao()
+    // Instanciamos el repositorio directamente (ya no necesita DAO)
+    private val repository = ReminderRepository()
 
-    // Obtenemos el ID del usuario actual de Firebase
-    private val currentUserId: String = FirebaseAuth.getInstance().currentUser?.uid ?: "unknown_user"
+    val allReminders: LiveData<List<Reminder>> = repository.allReminders.asLiveData()
+    val starredReminders: LiveData<List<Reminder>> = repository.starredReminders.asLiveData()
 
-    // Ahora filtramos las listas usando ese ID
-    val allReminders: LiveData<List<Reminder>> = reminderDao.getAllReminders(currentUserId).asLiveData()
-    val starredReminders: LiveData<List<Reminder>> = reminderDao.getStarredReminders(currentUserId).asLiveData()
-
-    fun insertReminder(reminder: Reminder) {
-        viewModelScope.launch {
-            reminderDao.insertReminder(reminder)
-        }
+    fun insertReminder(reminder: Reminder) = viewModelScope.launch {
+        repository.insert(reminder)
     }
 
     fun updateReminder(reminder: Reminder) = viewModelScope.launch {
-        reminderDao.updateReminder(reminder)
+        repository.update(reminder)
     }
 
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch {
-        reminderDao.deleteReminder(reminder)
+        repository.delete(reminder)
     }
 
-    fun getReminder(id: Int): LiveData<Reminder> {
-        return reminderDao.getReminderById(id).asLiveData()
+    // CAMBIO: El ID ahora es String
+    fun getReminder(id: String): LiveData<Reminder> {
+        val result = MutableLiveData<Reminder>()
+        viewModelScope.launch {
+            val reminder = repository.getReminder(id)
+            if (reminder != null) {
+                result.postValue(reminder)
+            }
+        }
+        return result
     }
 }
 

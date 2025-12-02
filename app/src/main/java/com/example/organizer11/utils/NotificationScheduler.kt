@@ -7,8 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.example.organizer11.data.model.Reminder
+import com.example.organizer11.ui.worker.ReminderWorker
 import java.text.SimpleDateFormat
 import java.util.*
+
+// Nota: Asegúrate de tener creada la clase 'ReminderReceiver' en este paquete o ajusta el import.
+// Si no la tienes, te daré el código abajo.
 
 object NotificationScheduler {
 
@@ -25,7 +29,8 @@ object NotificationScheduler {
     fun scheduleNotifications(context: Context, reminder: Reminder) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val eventTimeMillis = parseDateToMillis(reminder.startDate, reminder.dueTime)
+        // Parseamos la fecha
+        val eventTimeMillis = parseDateToMillis(reminder.endDate, reminder.dueTime)
 
         if (eventTimeMillis == -1L) return
 
@@ -35,19 +40,23 @@ object NotificationScheduler {
 
             val triggerAtMillis = eventTimeMillis - offsetMillis
 
+            // Solo programamos si la fecha es en el futuro
             if (triggerAtMillis > currentTime) {
+
+                // CORRECCIÓN AQUÍ:
+                // Convertimos el ID String de Firestore a un Int usando hashCode()
+                // Sumamos el index para que cada notificación del mismo recordatorio tenga ID distinto
+                val uniqueNotificationId = reminder.id.hashCode() + index
 
                 val intent = Intent(context, ReminderReceiver::class.java).apply {
                     putExtra("title", reminder.title)
                     putExtra("message", "$prefix ${reminder.title}")
-                    putExtra("id", reminder.id * 1000 + index)
+                    putExtra("id", uniqueNotificationId) // Pasamos el Int corregido
                 }
-
-                val uniqueRequestCode = reminder.id * 1000 + index
 
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,
-                    uniqueRequestCode,
+                    uniqueNotificationId, // Usamos el Int corregido como RequestCode
                     intent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -79,6 +88,7 @@ object NotificationScheduler {
 
             format.parse("$cleanDate $cleanTime")?.time ?: -1L
         } catch (e: Exception) {
+            e.printStackTrace()
             -1L
         }
     }

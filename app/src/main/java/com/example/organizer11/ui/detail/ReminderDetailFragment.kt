@@ -16,9 +16,7 @@ import com.example.organizer11.viewmodel.ReminderViewModelFactory
 
 class ReminderDetailFragment : Fragment() {
 
-    // CAMBIA ESE BLOQUE POR ESTE:
     private val viewModel: ReminderViewModel by viewModels {
-        // La Factory ahora pide 'Application', así que le damos solo eso.
         ReminderViewModelFactory(requireActivity().application)
     }
 
@@ -26,7 +24,6 @@ class ReminderDetailFragment : Fragment() {
 
     private lateinit var tvTitle: TextView
     private lateinit var tvDescription: TextView
-    // private lateinit var tvStart: TextView // <-- ELIMINADO
     private lateinit var tvEnd: TextView
     private lateinit var tvTime: TextView
 
@@ -43,7 +40,6 @@ class ReminderDetailFragment : Fragment() {
         // Encontrar las vistas
         tvTitle = view.findViewById(R.id.tv_detail_title)
         tvDescription = view.findViewById(R.id.tv_detail_description)
-        // tvStart = view.findViewById(R.id.tv_detail_start) // <-- ELIMINADO
         tvEnd = view.findViewById(R.id.tv_detail_end)
         tvTime = view.findViewById(R.id.tv_detail_time)
 
@@ -57,20 +53,15 @@ class ReminderDetailFragment : Fragment() {
     }
 
     private fun loadReminderData() {
-        val reminderId = try {
-            args.reminderId.toInt()
-        } catch (e: NumberFormatException) {
-            0
-        }
+        // CORRECCIÓN: El ID ya es String, no lo convertimos a Int
+        val reminderId = args.reminderId
 
-        if (reminderId != 0) {
+        // Verificamos que no esté vacío
+        if (reminderId.isNotEmpty()) {
             viewModel.getReminder(reminderId).observe(viewLifecycleOwner) { reminder ->
                 if (reminder != null) {
                     tvTitle.text = reminder.title
                     tvDescription.text = reminder.description ?: "Sin descripción"
-
-                    // Solo mostramos la Fecha Final y la Hora
-                    // tvStart.text = ... // <-- ELIMINADO
                     tvEnd.text = "Fecha límite: ${reminder.endDate}"
                     tvTime.text = "Hora límite: ${reminder.dueTime}"
                 }
