@@ -1,6 +1,6 @@
 package com.example.organizer11.ui.mainlist
 
-import android.graphics.Color // <-- IMPORTANTE: Para el color rojo
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.organizer11.R
 import com.example.organizer11.data.model.Reminder
-import com.example.organizer11.utils.NotificationScheduler // <-- IMPORTANTE: Tu util de fechas
+import com.example.organizer11.utils.NotificationScheduler // Importamos tu Scheduler
 
 interface ReminderClickListener {
     fun onDeleteClicked(reminder: Reminder)
@@ -58,27 +58,30 @@ class ReminderAdapter(
         fun bind(reminder: Reminder) {
             title.text = reminder.title
 
-            // ▼▼▼ LÓGICA DE VENCIMIENTO (CAMBIO IMPORTANTE) ▼▼▼
-
-            // 1. Convertimos la fecha guardada a milisegundos usando tu utilidad
+            // ▼▼▼ LÓGICA DE TIEMPO FINALIZADO / VENCIMIENTO ▼▼▼
+            // Usamos la función pública del Scheduler para obtener los milisegundos
             val dueMillis = NotificationScheduler.parseDateToMillis(reminder.endDate, reminder.dueTime)
             val now = System.currentTimeMillis()
 
-            if (dueMillis != null && now > dueMillis) {
-                // CASO 1: YA VENCIÓ (Fecha actual es mayor a la fecha límite)
-                dueDate.text = "VENCIDO: ${reminder.endDate}"
-                dueDate.setTextColor(Color.RED) // Texto en Rojo
+            android.util.Log.d("DEBUG_TIME", "Titulo: ${reminder.title}")
+            android.util.Log.d("DEBUG_TIME", "FechaString: ${reminder.endDate} ${reminder.dueTime}")
+            android.util.Log.d("DEBUG_TIME", "MillisCalculados: $dueMillis vs Ahora: $now")
+
+            if (dueMillis != -1L && now > dueMillis) {
+                // CASO 1: El tiempo ya pasó
+                dueDate.text = "Tiempo Finalizado"
+                dueDate.setTextColor(Color.RED)
             } else {
-                // CASO 2: AÚN ESTÁ A TIEMPO
+                // CASO 2: Aún a tiempo
                 dueDate.text = "Vence: ${reminder.endDate} - ${reminder.dueTime}"
-                dueDate.setTextColor(Color.DKGRAY) // Texto en Gris oscuro (Normal)
+                dueDate.setTextColor(Color.DKGRAY) // Gris oscuro
             }
-            // ▲▲▲ FIN DE LÓGICA DE VENCIMIENTO ▲▲▲
+            // ▲▲▲ FIN LÓGICA ▼▼▼
 
             icon.setImageResource(reminder.iconResId)
             starIcon.visibility = if (reminder.isStarred) View.VISIBLE else View.GONE
 
-            // Lógica para establecer el color del círculo
+            // Lógica para establecer el color del círculo de importancia
             val backgroundDrawableRes = when (reminder.importance) {
                 1 -> R.drawable.color_circle_medium
                 2 -> R.drawable.color_circle_high
@@ -103,6 +106,7 @@ class ReminderAdapter(
                 true
             )
 
+            // Configurar iconos del menú popup
             val starButton: ImageView = popupView.findViewById(R.id.popup_star)
             starButton.setImageResource(if (reminder.isStarred) R.drawable.ic_star_filled else R.drawable.ic_star_outline)
 
@@ -110,16 +114,19 @@ class ReminderAdapter(
             val checkMedium: ImageView = popupView.findViewById(R.id.popup_check_medium)
             val checkHigh: ImageView = popupView.findViewById(R.id.popup_check_high)
 
+            // Resetear visibilidad de los checks
             checkNormal.visibility = View.GONE
             checkMedium.visibility = View.GONE
             checkHigh.visibility = View.GONE
 
+            // Mostrar el check donde corresponda
             when (reminder.importance) {
                 0 -> checkNormal.visibility = View.VISIBLE
                 1 -> checkMedium.visibility = View.VISIBLE
                 2 -> checkHigh.visibility = View.VISIBLE
             }
 
+            // Click listeners del popup
             popupView.findViewById<View>(R.id.popup_star_container).setOnClickListener {
                 listener.onStarredClicked(reminder)
                 popupWindow.dismiss()

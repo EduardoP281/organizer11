@@ -26,10 +26,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_moon"
-        android:background="@color/app_background"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Cambiar tema"
         android:elevation="10dp"
-        app:tint="#6A35C5"
+        app:tint="@color/icon_tint"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -40,7 +40,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="#E8E0FF"
+
+        android:background="@color/nav_background"
+
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:indicatorColor="@android:color/transparent"

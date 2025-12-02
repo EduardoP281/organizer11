@@ -5,36 +5,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_background"
     tools:context=".ui.starred.StarredListFragment">
 
-    <!-- ▼▼▼ TÍTULO AÑADIDO ▼▼▼ -->
     <TextView
         android:id="@+id/tv_starred_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recordatorios Destacados"
-        android:textAppearance="?attr/textAppearanceHeadlineMedium"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <!-- ▲▲▲ FIN DEL TÍTULO ▲▲▲ -->
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_starred_reminders"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_starred_title" /> <!-- Anclado debajo del nuevo título -->
-
+        app:layout_constraintTop_toBottomOf="@id/tv_starred_title"
+        tools:listitem="@layout/item_reminder"/>
 
     <LinearLayout
         android:id="@+id/layout_no_starred_items"
@@ -46,7 +43,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_starred_title"  tools:visibility="visible"> <!-- Anclado debajo del nuevo título -->
+        app:layout_constraintTop_toBottomOf="@id/tv_starred_title"
+        tools:visibility="visible">
 
         <ImageView
             android:layout_width="80dp"
@@ -60,14 +58,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No tienes recordatorios destacados"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:textColor="?android:attr/textColorSecondary"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Usa el menú de un recordatorio para destacarlo."
-            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textSize="14sp"
             android:textColor="?android:attr/textColorSecondary"
             android:layout_marginTop="4dp"/>
 
