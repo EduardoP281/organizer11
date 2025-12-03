@@ -1,6 +1,7 @@
 package com.example.organizer11.data.model
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -23,6 +24,11 @@ data class Reminder(
 import com.google.firebase.firestore.PropertyName // <-- IMPORTANTE
 
 data class Reminder(
+=======
+import com.google.firebase.firestore.PropertyName // <-- IMPORTANTE
+
+data class Reminder(
+>>>>>>> Stashed changes
     var id: String = "",
     val userId: String = "",
     val title: String = "",
@@ -34,6 +40,9 @@ data class Reminder(
 
     // ▼▼▼ ESTO SOLUCIONA EL PROBLEMA DE GUARDADO ▼▼▼
     @get:PropertyName("isStarred")
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     val isStarred: Boolean = false,
 

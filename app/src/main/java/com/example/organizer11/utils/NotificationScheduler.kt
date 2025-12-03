@@ -26,8 +26,11 @@ object NotificationScheduler {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         val eventTimeMillis = parseDateToMillis(reminder.startDate, reminder.dueTime)
 =======
+=======
+>>>>>>> Stashed changes
         // 1. Intentar convertir la fecha
         val eventTimeMillis = parseDateToMillis(reminder.endDate, reminder.dueTime)
 >>>>>>> Stashed changes
@@ -55,6 +58,7 @@ object NotificationScheduler {
             val triggerAtMillis = eventTimeMillis - offsetMillis
 
             if (triggerAtMillis > currentTime) {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
                 val intent = Intent(context, ReminderReceiver::class.java).apply {
@@ -85,6 +89,11 @@ object NotificationScheduler {
                 } catch (e: SecurityException) {
                     e.printStackTrace()
                 }
+=======
+                // Usamos hashCode para convertir el ID de texto a número
+                val uniqueId = reminder.id.hashCode() + index
+                scheduleAlarm(context, alarmManager, triggerAtMillis, reminder, prefix, uniqueId)
+>>>>>>> Stashed changes
 =======
                 // Usamos hashCode para convertir el ID de texto a número
                 val uniqueId = reminder.id.hashCode() + index

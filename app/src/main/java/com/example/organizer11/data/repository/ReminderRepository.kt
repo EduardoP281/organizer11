@@ -27,6 +27,9 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
     private fun getCollection() =
         db.collection("users").document(currentUserId).collection("reminders")
 
+    private fun getCollection() =
+        db.collection("users").document(currentUserId).collection("reminders")
+
     // --- LEER TODOS ---
     val allReminders: Flow<List<Reminder>> = callbackFlow {
         if (currentUserId.isEmpty()) {
@@ -87,6 +90,9 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
 =======
         if (currentUserId.isEmpty()) return
         getCollection().document(reminder.id).set(reminder).await()
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 

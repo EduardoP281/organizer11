@@ -58,6 +58,7 @@ class ReminderDetailFragment : Fragment() {
 
     private fun loadReminderData() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         val reminderId = try {
             args.reminderId.toInt()
         } catch (e: NumberFormatException) {
@@ -66,6 +67,8 @@ class ReminderDetailFragment : Fragment() {
 
         if (reminderId != 0) {
 =======
+=======
+>>>>>>> Stashed changes
         // CORRECCIÓN: El ID ya es String. No usamos toInt()
         val reminderId = args.reminderId
 
