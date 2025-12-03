@@ -57,6 +57,7 @@ class ReminderDetailFragment : Fragment() {
     }
 
     private fun loadReminderData() {
+<<<<<<< Updated upstream
         val reminderId = try {
             args.reminderId.toInt()
         } catch (e: NumberFormatException) {
@@ -64,6 +65,12 @@ class ReminderDetailFragment : Fragment() {
         }
 
         if (reminderId != 0) {
+=======
+        // CORRECCIÓN: El ID ya es String. No usamos toInt()
+        val reminderId = args.reminderId
+
+        if (reminderId.isNotEmpty()) {
+>>>>>>> Stashed changes
             viewModel.getReminder(reminderId).observe(viewLifecycleOwner) { reminder ->
                 if (reminder != null) {
                     tvTitle.text = reminder.title

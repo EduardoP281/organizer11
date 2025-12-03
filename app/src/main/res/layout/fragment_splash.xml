@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="© 2025 Organizer App"
+        android:text="© 2025 - Team11Go"
         android:fontFamily="sans-serif"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"

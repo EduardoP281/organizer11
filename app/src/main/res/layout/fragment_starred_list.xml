@@ -8,29 +8,35 @@
     android:background="@color/app_background"
     tools:context=".ui.starred.StarredListFragment">
 
-    <TextView
-        android:id="@+id/tv_starred_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/header_starred"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recordatorios Destacados"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_margin="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_starred_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destacados"
+            android:textSize="26sp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/text_primary" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_starred_reminders"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_starred_title"
+        app:layout_constraintTop_toBottomOf="@id/header_starred"
         tools:listitem="@layout/item_reminder"/>
 
     <LinearLayout
@@ -43,32 +49,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_starred_title"
+        app:layout_constraintTop_toBottomOf="@id/header_starred"
         tools:visibility="visible">
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_star_outline"
-            app:tint="?android:attr/textColorSecondary"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="No hay destacados"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_rawRes="@raw/star"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No tienes recordatorios destacados"
+            android:text="Sin favoritos"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorSecondary"/>
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Usa el menú de un recordatorio para destacarlo."
-            android:textSize="14sp"
+            android:text="Marca tus tareas importantes con la estrella"
             android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginTop="4dp"/>
+            android:gravity="center"
+            android:paddingHorizontal="32dp"/>
 
     </LinearLayout>
 

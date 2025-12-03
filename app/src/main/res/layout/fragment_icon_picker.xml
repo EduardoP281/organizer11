@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seleccionar Ícono"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+    android:padding="16dp"
+    android:background="@color/card_background"> <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Seleccionar Ícono"
+    android:textColor="@color/text_primary"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_marginBottom="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_icons"
@@ -23,4 +22,5 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="4"
         android:overScrollMode="never"
-        tools:listitem="@layout/item_icon" /> </LinearLayout>
+        tools:listitem="@layout/item_icon" />
+</LinearLayout>

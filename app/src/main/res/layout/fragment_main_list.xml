@@ -8,40 +8,50 @@
     android:background="@color/app_background"
     tools:context=".ui.mainlist.MainListFragment">
 
-    <TextView
-        android:id="@+id/tv_main_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lista de recordatorios"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <ImageButton
-        android:id="@+id/btn_logout"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_arrow_back"
-        android:rotation="180"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:tint="@color/text_primary"
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mis Recordatorios"
+            android:textSize="26sp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/text_primary" />
 
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="80dp"
+        <ImageButton
+            android:id="@+id/btn_logout"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:rotation="180"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/card_background"
+            android:contentDescription="Cerrar sesión"
+            android:layout_marginEnd="56dp"
+            app:tint="@color/text_primary" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_reminders"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:paddingTop="8dp"
+        android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_title"
+        app:layout_constraintTop_toBottomOf="@id/header_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,8 +71,8 @@
         tools:visibility="visible">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             app:lottie_rawRes="@raw/anim_empty"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"/>
@@ -70,15 +80,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¡Todo limpio!"
-            android:textSize="18sp"
+            android:text="¡Todo al día!"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Agrega una tarea nueva"
+            android:text="No tienes tareas pendientes"
             android:textColor="?android:attr/textColorSecondary"/>
     </LinearLayout>
 

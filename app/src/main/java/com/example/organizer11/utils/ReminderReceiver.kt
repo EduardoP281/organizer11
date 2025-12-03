@@ -14,55 +14,42 @@ import com.example.organizer11.R
 class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        // Recibir los datos que enviamos desde el Scheduler
         val title = intent.getStringExtra("title") ?: "Recordatorio"
-        val message = intent.getStringExtra("message") ?: "Tienes un evento pendiente"
-        val reminderId = intent.getIntExtra("id", 0)
+        val message = intent.getStringExtra("message") ?: "Evento pendiente"
+        val id = intent.getIntExtra("id", 0)
 
-        // Mostrar la notificación
-        showNotification(context, title, message, reminderId)
+        showNotification(context, title, message, id)
     }
 
-    private fun showNotification(context: Context, title: String, message: String, reminderId: Int) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "reminder_channel"
+    private fun showNotification(context: Context, title: String, message: String, id: Int) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "reminder_channel_v2" // Cambié el ID por si el anterior estaba bugueado
 
-        // 1. Crear el canal de notificación (Obligatorio para Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Recordatorios",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notificaciones de tus eventos agendados"
-                enableVibration(true)
-            }
-            notificationManager.createNotificationChannel(channel)
+                "Recordatorios Organizer",
+                NotificationManager.IMPORTANCE_HIGH // ¡Importante! HIGH hace que suene y vibre
+            )
+            channel.enableVibration(true)
+            manager.createNotificationChannel(channel)
         }
 
-        // 2. Definir qué pasa al tocar la notificación (Abrir la app)
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(
-            context,
-            reminderId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            context, id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // 3. Construir el diseño de la notificación
         val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher_round) // Usamos el icono de tu app
+            .setSmallIcon(R.drawable.ic_list) // Asegúrate que este icono exista
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true) // Se borra al tocarla
+            .setAutoCancel(true)
             .build()
 
-        // 4. Lanzar la notificación
-        notificationManager.notify(reminderId, notification)
+        manager.notify(id, notification)
     }
 }
