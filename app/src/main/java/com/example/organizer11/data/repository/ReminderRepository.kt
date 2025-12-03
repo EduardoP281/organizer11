@@ -1,31 +1,21 @@
 package com.example.organizer11.data.repository
 
-import com.example.organizer11.data.database.ReminderDao
+import android.util.Log
 import com.example.organizer11.data.model.Reminder
-import com.google.firebase.auth.FirebaseAuth // <-- Importante
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
-class ReminderRepository(private val reminderDao: ReminderDao) {
+class ReminderRepository {
 
-    // Helper para obtener el ID actual de Firebase
-    // Si no hay usuario (ej. logout), devuelve una cadena vacía para que no muestre datos de otros
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
     private val currentUserId: String
-        get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
-<<<<<<< Updated upstream
-    // --- LIVEDATA / FLOWS ---
-
-    // Ahora pasamos el 'currentUserId' al DAO
-    val allReminders: Flow<List<Reminder>>
-        get() = reminderDao.getAllReminders(currentUserId)
-
-    val starredReminders: Flow<List<Reminder>>
-        get() = reminderDao.getStarredReminders(currentUserId)
-
-    // --- FUNCIONES SUSPENDIDAS ---
-=======
-    private fun getCollection() =
-        db.collection("users").document(currentUserId).collection("reminders")
+        get() = auth.currentUser?.uid ?: ""
 
     private fun getCollection() =
         db.collection("users").document(currentUserId).collection("reminders")
@@ -71,39 +61,23 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
             }
         awaitClose { subscription.remove() }
     }
->>>>>>> Stashed changes
 
+    // --- GUARDAR ---
     suspend fun insert(reminder: Reminder) {
-<<<<<<< Updated upstream
-        reminderDao.insertReminder(reminder)
-=======
         if (currentUserId.isEmpty()) return
         val docRef = getCollection().document()
         val reminderWithId = reminder.copy(id = docRef.id)
         docRef.set(reminderWithId).await()
->>>>>>> Stashed changes
     }
 
+    // --- ACTUALIZAR ---
     suspend fun update(reminder: Reminder) {
-<<<<<<< Updated upstream
-        reminderDao.updateReminder(reminder)
-=======
         if (currentUserId.isEmpty()) return
         getCollection().document(reminder.id).set(reminder).await()
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }
 
+    // --- BORRAR ---
     suspend fun delete(reminder: Reminder) {
-<<<<<<< Updated upstream
-        reminderDao.deleteReminder(reminder)
-    }
-
-    fun getReminder(id: Int): Flow<Reminder> {
-        return reminderDao.getReminderById(id)
-=======
         if (currentUserId.isEmpty()) return
         getCollection().document(reminder.id).delete().await()
     }
@@ -115,6 +89,5 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
             val doc = getCollection().document(id).get().await()
             doc.toObject(Reminder::class.java)
         } catch (e: Exception) { null }
->>>>>>> Stashed changes
     }
 }

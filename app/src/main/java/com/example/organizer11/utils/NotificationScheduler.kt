@@ -25,15 +25,8 @@ object NotificationScheduler {
     fun scheduleNotifications(context: Context, reminder: Reminder) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        val eventTimeMillis = parseDateToMillis(reminder.startDate, reminder.dueTime)
-=======
-=======
->>>>>>> Stashed changes
         // 1. Intentar convertir la fecha
         val eventTimeMillis = parseDateToMillis(reminder.endDate, reminder.dueTime)
->>>>>>> Stashed changes
 
         if (eventTimeMillis == -1L) {
             Toast.makeText(context, "Error: No se pudo leer la fecha de la alarma", Toast.LENGTH_LONG).show()
@@ -58,47 +51,9 @@ object NotificationScheduler {
             val triggerAtMillis = eventTimeMillis - offsetMillis
 
             if (triggerAtMillis > currentTime) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-                val intent = Intent(context, ReminderReceiver::class.java).apply {
-                    putExtra("title", reminder.title)
-                    putExtra("message", "$prefix ${reminder.title}")
-                    putExtra("id", reminder.id * 1000 + index)
-                }
-
-                val uniqueRequestCode = reminder.id * 1000 + index
-
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    uniqueRequestCode,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                )
-
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        if (alarmManager.canScheduleExactAlarms()) {
-                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                        } else {
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                        }
-                    } else {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                    }
-                } catch (e: SecurityException) {
-                    e.printStackTrace()
-                }
-=======
                 // Usamos hashCode para convertir el ID de texto a número
                 val uniqueId = reminder.id.hashCode() + index
                 scheduleAlarm(context, alarmManager, triggerAtMillis, reminder, prefix, uniqueId)
->>>>>>> Stashed changes
-=======
-                // Usamos hashCode para convertir el ID de texto a número
-                val uniqueId = reminder.id.hashCode() + index
-                scheduleAlarm(context, alarmManager, triggerAtMillis, reminder, prefix, uniqueId)
->>>>>>> Stashed changes
             }
         }
     }
@@ -167,6 +122,7 @@ object NotificationScheduler {
             }
             -1L
         } catch (e: Exception) {
+            e.printStackTrace()
             -1L
         }
     }

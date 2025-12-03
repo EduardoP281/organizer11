@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "220339841394",
+    "firebase_url": "https://organizer11db-default-rtdb.firebaseio.com",
     "project_id": "organizer11db",
     "storage_bucket": "organizer11db.firebasestorage.app"
   },

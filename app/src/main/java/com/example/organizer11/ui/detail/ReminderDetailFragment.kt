@@ -16,9 +16,7 @@ import com.example.organizer11.viewmodel.ReminderViewModelFactory
 
 class ReminderDetailFragment : Fragment() {
 
-    // CAMBIA ESE BLOQUE POR ESTE:
     private val viewModel: ReminderViewModel by viewModels {
-        // La Factory ahora pide 'Application', así que le damos solo eso.
         ReminderViewModelFactory(requireActivity().application)
     }
 
@@ -26,7 +24,6 @@ class ReminderDetailFragment : Fragment() {
 
     private lateinit var tvTitle: TextView
     private lateinit var tvDescription: TextView
-    // private lateinit var tvStart: TextView // <-- ELIMINADO
     private lateinit var tvEnd: TextView
     private lateinit var tvTime: TextView
 
@@ -40,13 +37,10 @@ class ReminderDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Encontrar las vistas
         tvTitle = view.findViewById(R.id.tv_detail_title)
         tvDescription = view.findViewById(R.id.tv_detail_description)
-        // tvStart = view.findViewById(R.id.tv_detail_start) // <-- ELIMINADO
         tvEnd = view.findViewById(R.id.tv_detail_end)
         tvTime = view.findViewById(R.id.tv_detail_time)
-
         val btnBack: ImageButton = view.findViewById(R.id.btn_back_detail)
 
         btnBack.setOnClickListener {
@@ -57,30 +51,14 @@ class ReminderDetailFragment : Fragment() {
     }
 
     private fun loadReminderData() {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        val reminderId = try {
-            args.reminderId.toInt()
-        } catch (e: NumberFormatException) {
-            0
-        }
-
-        if (reminderId != 0) {
-=======
-=======
->>>>>>> Stashed changes
         // CORRECCIÓN: El ID ya es String. No usamos toInt()
         val reminderId = args.reminderId
 
         if (reminderId.isNotEmpty()) {
->>>>>>> Stashed changes
             viewModel.getReminder(reminderId).observe(viewLifecycleOwner) { reminder ->
                 if (reminder != null) {
                     tvTitle.text = reminder.title
                     tvDescription.text = reminder.description ?: "Sin descripción"
-
-                    // Solo mostramos la Fecha Final y la Hora
-                    // tvStart.text = ... // <-- ELIMINADO
                     tvEnd.text = "Fecha límite: ${reminder.endDate}"
                     tvTime.text = "Hora límite: ${reminder.dueTime}"
                 }

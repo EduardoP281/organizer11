@@ -4,31 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible // Importante para .isVisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper // Para el Swipe
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.organizer11.OrganizerApplication
 import com.example.organizer11.R
 import com.example.organizer11.data.model.Reminder
 import com.example.organizer11.databinding.FragmentMainListBinding
 import com.example.organizer11.viewmodel.ReminderViewModel
 import com.example.organizer11.viewmodel.ReminderViewModelFactory
-import com.google.android.material.snackbar.Snackbar // Para el mensaje "Deshacer"
-import com.google.firebase.auth.FirebaseAuth // Para cerrar sesión
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 class MainListFragment : Fragment(), ReminderClickListener {
 
     private var _binding: FragmentMainListBinding? = null
     private val binding get() = _binding!!
 
-    // Inyecta el ViewModel usando la Factory
-// CAMBIA ESE BLOQUE POR ESTE:
+    // Inicialización del ViewModel (CORRECTA)
     private val viewModel: ReminderViewModel by viewModels {
-        // La Factory ahora pide 'Application', así que le damos solo eso.
         ReminderViewModelFactory(requireActivity().application)
     }
 
@@ -45,28 +42,18 @@ class MainListFragment : Fragment(), ReminderClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Configurar RecyclerView
         setupRecyclerView()
-
-        // 2. Configurar Swipe to Delete (Deslizar para borrar)
         setupSwipeToDelete()
 
-        // 3. Configurar Botón Logout
         binding.btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            // Navegar al Login y borrar el historial para no poder volver atrás
             findNavController().navigate(R.id.action_mainListFragment_to_singInFragment)
         }
 
-        // 4. Observar datos y manejar Estado Vacío (Lottie)
         viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
-            // Actualizar la lista
             reminderAdapter.submitList(reminders)
-
-            // Lógica de Lottie: Si la lista está vacía, mostramos la animación
-            val isEmpty = reminders.isEmpty()
-            binding.rvReminders.isVisible = !isEmpty // Si NO está vacía, muestra la lista
-            binding.layoutEmptyState.isVisible = isEmpty // Si ESTÁ vacía, muestra la animación
+            binding.rvReminders.isVisible = reminders.isNotEmpty()
+            binding.layoutEmptyState.isVisible = reminders.isEmpty()
         }
     }
 
@@ -76,58 +63,36 @@ class MainListFragment : Fragment(), ReminderClickListener {
         binding.rvReminders.adapter = reminderAdapter
     }
 
-    // Función para manejar el deslizamiento
     private fun setupSwipeToDelete() {
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false // No queremos mover ítems de lugar, solo deslizar
-            }
-
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(r: RecyclerView, v: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Obtener el recordatorio de la posición deslizada
-                val position = viewHolder.adapterPosition
-                val reminder = reminderAdapter.currentList[position]
-
-                // Borrar de la base de datos
+                val reminder = reminderAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteReminder(reminder)
-
-                // Mostrar mensaje Snack con opción "Deshacer"
-                Snackbar.make(binding.root, "Recordatorio eliminado", Snackbar.LENGTH_LONG)
-                    .setAction("Deshacer") {
-                        // Si el usuario toca deshacer, lo insertamos de nuevo
-                        viewModel.insertReminder(reminder)
-                    }.show()
+                Snackbar.make(binding.root, "Eliminado", Snackbar.LENGTH_LONG)
+                    .setAction("Deshacer") { viewModel.insertReminder(reminder) }.show()
             }
         }
-
-        // Unir el ayudante de toque al RecyclerView
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvReminders)
+        ItemTouchHelper(callback).attachToRecyclerView(binding.rvReminders)
     }
-
-    // --- Implementación de la Interfaz ReminderClickListener ---
 
     override fun onDeleteClicked(reminder: Reminder) {
         viewModel.deleteReminder(reminder)
-        // Opcional: Mostrar Snackbar aquí también
     }
 
     override fun onImportanceChanged(reminder: Reminder, newImportance: Int) {
-        val updatedReminder = reminder.copy(importance = newImportance)
-        viewModel.updateReminder(updatedReminder)
+        // En Firestore, usamos 'updateReminder'
+        val updated = reminder.copy(importance = newImportance)
+        viewModel.updateReminder(updated)
     }
 
     override fun onStarredClicked(reminder: Reminder) {
-        val updatedReminder = reminder.copy(isStarred = !reminder.isStarred)
-        viewModel.updateReminder(updatedReminder)
+        val updated = reminder.copy(isStarred = !reminder.isStarred)
+        viewModel.updateReminder(updated)
     }
 
     override fun onItemClicked(reminder: Reminder) {
-        val action = MainListFragmentDirections
-            .actionMainListFragmentToReminderDetailFragment(reminder.id.toString())
+        val action = MainListFragmentDirections.actionMainListFragmentToReminderDetailFragment(reminder.id)
         findNavController().navigate(action)
     }
 

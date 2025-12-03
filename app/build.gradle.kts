@@ -48,6 +48,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore)
 
     // Core
     implementation("androidx.fragment:fragment-ktx:1.6.2") // (Esta la tenías separada, está bien)
@@ -67,11 +68,6 @@ dependencies {
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Room (Usando solo KSP)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     // Test
     testImplementation(libs.junit)
