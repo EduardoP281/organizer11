@@ -69,8 +69,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(libs.firebase.firestore)
-
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

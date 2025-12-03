@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class ReminderViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Instanciamos el repositorio directamente (ya no necesita DAO)
     private val repository = ReminderRepository()
 
     val allReminders: LiveData<List<Reminder>> = repository.allReminders.asLiveData()
@@ -32,14 +31,11 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         repository.delete(reminder)
     }
 
-    // CAMBIO: El ID ahora es String
     fun getReminder(id: String): LiveData<Reminder> {
         val result = MutableLiveData<Reminder>()
         viewModelScope.launch {
             val reminder = repository.getReminder(id)
-            if (reminder != null) {
-                result.postValue(reminder)
-            }
+            if (reminder != null) result.postValue(reminder)
         }
         return result
     }

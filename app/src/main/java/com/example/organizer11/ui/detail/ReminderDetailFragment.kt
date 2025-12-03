@@ -27,36 +27,23 @@ class ReminderDetailFragment : Fragment() {
     private lateinit var tvEnd: TextView
     private lateinit var tvTime: TextView
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_reminder_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Encontrar las vistas
         tvTitle = view.findViewById(R.id.tv_detail_title)
         tvDescription = view.findViewById(R.id.tv_detail_description)
         tvEnd = view.findViewById(R.id.tv_detail_end)
         tvTime = view.findViewById(R.id.tv_detail_time)
-
         val btnBack: ImageButton = view.findViewById(R.id.btn_back_detail)
 
-        btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        btnBack.setOnClickListener { findNavController().popBackStack() }
 
-        loadReminderData()
-    }
-
-    private fun loadReminderData() {
-        // CORRECCIÓN: El ID ya es String, no lo convertimos a Int
+        // ID es String
         val reminderId = args.reminderId
-
-        // Verificamos que no esté vacío
         if (reminderId.isNotEmpty()) {
             viewModel.getReminder(reminderId).observe(viewLifecycleOwner) { reminder ->
                 if (reminder != null) {

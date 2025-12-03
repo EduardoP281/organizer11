@@ -1,8 +1,8 @@
 package com.example.organizer11.data.model
 
-// Quitamos @Entity y @PrimaryKey porque ya no usaremos Room
+// Clase de datos pura para Firestore (sin Room)
 data class Reminder(
-    var id: String = "", // CAMBIO CRÍTICO: Ahora es String y mutable
+    var id: String = "", // ID de texto
     val userId: String = "",
     val title: String = "",
     val description: String? = null,
@@ -13,6 +13,6 @@ data class Reminder(
     val isStarred: Boolean = false,
     val importance: Int = 0
 ) {
-    // Constructor vacío necesario para que Firestore convierta los datos automáticamente
+    // Constructor vacío obligatorio para Firebase
     constructor() : this("", "", "", null, "", "", "", 0, false, 0)
 }
